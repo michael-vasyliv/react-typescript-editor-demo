@@ -6,7 +6,6 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices';
-import Context from '@ckeditor/ckeditor5-core/src/context';
 import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
@@ -21,7 +20,7 @@ import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
-import { CKEditor, CKEditorContext } from '@ckeditor/ckeditor5-react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
@@ -32,80 +31,78 @@ import React from 'react';
 export function CkEditor() {
     return (
         <div>
-            <CKEditorContext context={Context}>
-                <CKEditor
-                    editor={ClassicEditor}
-                    config={{
-                        plugins: [
-                            Essentials,
-                            UploadAdapter,
-                            Autoformat,
-                            Bold,
-                            Italic,
-                            BlockQuote,
-                            CKFinder,
-                            CloudServices,
-                            EasyImage,
-                            Heading,
-                            Image,
-                            ImageCaption,
-                            ImageStyle,
-                            ImageToolbar,
-                            ImageUpload,
-                            Indent,
-                            Link,
-                            List,
-                            Paragraph,
-                            PasteFromOffice,
-                            Table,
-                            TableToolbar,
-                            TextTransformation,
-                            TableProperties,
-                            TableCellProperties
-                        ],
-                        toolbar: {
-                            items: [
-                                'heading',
-                                '|',
-                                'bold',
-                                'italic',
-                                'link',
-                                'bulletedList',
-                                'numberedList',
-                                '|',
-                                'outdent',
-                                'indent',
-                                '|',
-                                'uploadImage',
-                                'blockQuote',
-                                'insertTable',
-                                'undo',
-                                'redo'
-                            ]
-                        },
-                        image: {
-                            toolbar: [
-                                'imageStyle:inline',
-                                'imageStyle:block',
-                                'imageStyle:side',
-                                '|',
-                                'toggleImageCaption',
-                                'imageTextAlternative'
-                            ]
-                        },
-                        table: {
-                            contentToolbar: [
-                                'tableColumn',
-                                'tableRow',
-                                'mergeTableCells'
-                            ]
-                        },
-                        // This value must be kept in sync with the language defined in webpack.config.js.
-                        language: 'en'
-                    }}
-                    data="<p>Hello from the first editor working with the context!</p>"
-                />
-            </CKEditorContext>
+            <CKEditor
+                editor={ClassicEditor}
+                config={{
+                    plugins: [
+                        Essentials,
+                        UploadAdapter,
+                        Autoformat,
+                        Bold,
+                        Italic,
+                        BlockQuote,
+                        CKFinder,
+                        CloudServices,
+                        EasyImage,
+                        Heading,
+                        Image,
+                        ImageCaption,
+                        ImageStyle,
+                        ImageToolbar,
+                        ImageUpload,
+                        Indent,
+                        Link,
+                        List,
+                        Paragraph,
+                        PasteFromOffice,
+                        Table,
+                        TableToolbar,
+                        TextTransformation,
+                        TableProperties,
+                        TableCellProperties
+                    ],
+                    toolbar: {
+                        items: [
+                            'heading',
+                            '|',
+                            'bold',
+                            'italic',
+                            'link',
+                            'bulletedList',
+                            'numberedList',
+                            '|',
+                            'outdent',
+                            'indent',
+                            '|',
+                            'uploadImage',
+                            'blockQuote',
+                            'insertTable',
+                            'undo',
+                            'redo'
+                        ]
+                    },
+                    image: {
+                        toolbar: [
+                            'imageStyle:inline',
+                            'imageStyle:block',
+                            'imageStyle:side',
+                            '|',
+                            'toggleImageCaption',
+                            'imageTextAlternative'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells'
+                        ]
+                    },
+                    // This value must be kept in sync with the language defined in webpack.config.js.
+                    language: 'en'
+                }}
+                data="<p>Hello from the first editor working with the context!</p>"
+            />
         </div>
     );
 }
