@@ -4,7 +4,12 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const rimraf = require('rimraf');
 const common = require('./webpack-common.config');
+
+const outputPath = path.resolve(__dirname, 'build');
+
+rimraf.sync(outputPath);
 
 module.exports = merge(common, {
     mode: 'production',
@@ -12,7 +17,7 @@ module.exports = merge(common, {
     output: {
         filename: '[name].[contenthash:8].js',
         chunkFilename: '[name].[contenthash:8].chunk.js',
-        path: path.resolve(__dirname, 'build'),
+        path: outputPath,
         publicPath: '/'
     },
     optimization: {

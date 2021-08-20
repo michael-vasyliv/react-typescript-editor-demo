@@ -3,8 +3,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 
 module.exports = {
     context: path.resolve(__dirname, 'src'),
@@ -25,12 +26,31 @@ module.exports = {
                 exclude: [/node_modules/]
             },
             {
-                test: /\.(sa|sc|c)ss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                exclude: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                use: '@svgr/webpack'
             },
             {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                use: '@svgr/webpack'
+                test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                use: ['raw-loader']
+            },
+            {
+                test: /\.css$/i,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: styles.getPostCssConfig({
+                                themeImporter: {
+                                    themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
+                                },
+                                minify: true
+                            })
+                        }
+                    }
+                ]
             }
         ]
     },

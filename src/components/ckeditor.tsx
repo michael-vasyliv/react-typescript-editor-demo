@@ -1,27 +1,111 @@
-/* eslint-disable no-console */
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
+/* eslint-disable import/no-extraneous-dependencies */
+import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
+import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
+import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
+import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices';
+import Context from '@ckeditor/ckeditor5-core/src/context';
+import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
+import Heading from '@ckeditor/ckeditor5-heading/src/heading';
+import Image from '@ckeditor/ckeditor5-image/src/image';
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
+import Indent from '@ckeditor/ckeditor5-indent/src/indent';
+import Link from '@ckeditor/ckeditor5-link/src/link';
+import List from '@ckeditor/ckeditor5-list/src/list';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
+import { CKEditor, CKEditorContext } from '@ckeditor/ckeditor5-react';
+import Table from '@ckeditor/ckeditor5-table/src/table';
+import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
+import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
+import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
 import React from 'react';
 
 export function CkEditor() {
     return (
-        <CKEditor
-            editor={ClassicEditor}
-            data="<p>Hello from CKEditor 5!</p>"
-            onReady={(editor) => {
-                // You can store the "editor" and use when it is needed.
-                console.log('Editor is ready to use!', editor);
-            }}
-            onChange={(event, editor) => {
-                const data = editor.getData();
-                console.log({ event, editor, data });
-            }}
-            onBlur={(event, editor) => {
-                console.log('Blur.', event, editor);
-            }}
-            onFocus={(event, editor) => {
-                console.log('Focus.', event, editor);
-            }}
-        />
+        <div>
+            <CKEditorContext context={Context}>
+                <CKEditor
+                    editor={ClassicEditor}
+                    config={{
+                        plugins: [
+                            Essentials,
+                            UploadAdapter,
+                            Autoformat,
+                            Bold,
+                            Italic,
+                            BlockQuote,
+                            CKFinder,
+                            CloudServices,
+                            EasyImage,
+                            Heading,
+                            Image,
+                            ImageCaption,
+                            ImageStyle,
+                            ImageToolbar,
+                            ImageUpload,
+                            Indent,
+                            Link,
+                            List,
+                            Paragraph,
+                            PasteFromOffice,
+                            Table,
+                            TableToolbar,
+                            TextTransformation,
+                            TableProperties,
+                            TableCellProperties
+                        ],
+                        toolbar: {
+                            items: [
+                                'heading',
+                                '|',
+                                'bold',
+                                'italic',
+                                'link',
+                                'bulletedList',
+                                'numberedList',
+                                '|',
+                                'outdent',
+                                'indent',
+                                '|',
+                                'uploadImage',
+                                'blockQuote',
+                                'insertTable',
+                                'undo',
+                                'redo'
+                            ]
+                        },
+                        image: {
+                            toolbar: [
+                                'imageStyle:inline',
+                                'imageStyle:block',
+                                'imageStyle:side',
+                                '|',
+                                'toggleImageCaption',
+                                'imageTextAlternative'
+                            ]
+                        },
+                        table: {
+                            contentToolbar: [
+                                'tableColumn',
+                                'tableRow',
+                                'mergeTableCells'
+                            ]
+                        },
+                        // This value must be kept in sync with the language defined in webpack.config.js.
+                        language: 'en'
+                    }}
+                    data="<p>Hello from the first editor working with the context!</p>"
+                />
+            </CKEditorContext>
+        </div>
     );
 }
