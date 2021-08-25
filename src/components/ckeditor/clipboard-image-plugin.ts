@@ -45,7 +45,7 @@ export class ClipboardImagePlugin extends Plugin {
                     /** filter out internal images */
                     .filter(({ item }) => !item.getAttribute('src')?.match(BASE_URL as string))
                     .filter(({ item }) => !item.getAttribute('uploadProcessed'))
-                    .map(({ item }) => ({ promise: fetchLocalImage(item), item }));
+                    .map(({ item }) => ({ promise: fetchLocalImage(item), element: item }));
 
                 if (!fetchableImages.length) {
                     return;
@@ -55,13 +55,13 @@ export class ClipboardImagePlugin extends Plugin {
 
                 fetchableImages.forEach((image) => {
                     /** Set attribute marking that the image was processed already. */
-                    writer.setAttribute('uploadProcessed', 'true', image.item);
+                    writer.setAttribute('uploadProcessed', 'true', image.element);
 
                     const loader = fileRepository.createLoader(image.promise as any);
 
                     if (loader) {
-                        writer.setAttribute('src', '', image.item);
-                        writer.setAttribute('uploadId', `${loader.id}`, image.item);
+                        writer.setAttribute('src', '', image.element);
+                        writer.setAttribute('uploadId', `${loader.id}`, image.element);
                     }
                 });
             }) as any);
