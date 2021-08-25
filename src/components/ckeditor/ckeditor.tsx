@@ -1,20 +1,16 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
-import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices';
-import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
+// import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Image from '@ckeditor/ckeditor5-image/src/image';
-import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
+import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
-import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
@@ -26,7 +22,10 @@ import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperti
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
+import { FileRepository } from '@ckeditor/ckeditor5-upload';
 import React from 'react';
+import { AxiosUploadPlugin } from './axios-upload-plugin';
+import { ClipboardImagePlugin } from './clipboard-image-plugin';
 
 export function CkEditor() {
     return (
@@ -34,26 +33,30 @@ export function CkEditor() {
             <CKEditor
                 editor={ClassicEditor}
                 config={{
+                    onerror: console.log,
                     plugins: [
+                        FileRepository,
+                        AxiosUploadPlugin,
+                        ClipboardImagePlugin,
+
+                        Image,
+                        ImageInsert,
+                        // EasyImage,
+                        ImageStyle,
+                        ImageToolbar,
+
                         Essentials,
-                        UploadAdapter,
                         Autoformat,
                         Bold,
                         Italic,
                         BlockQuote,
-                        CKFinder,
-                        CloudServices,
-                        EasyImage,
                         Heading,
-                        Image,
-                        ImageCaption,
-                        ImageStyle,
-                        ImageToolbar,
-                        ImageUpload,
+
                         Indent,
                         Link,
                         List,
                         Paragraph,
+
                         PasteFromOffice,
                         Table,
                         TableToolbar,
@@ -74,7 +77,7 @@ export function CkEditor() {
                             'outdent',
                             'indent',
                             '|',
-                            'uploadImage',
+                            'insertImage',
                             'blockQuote',
                             'insertTable',
                             'undo',
