@@ -17,7 +17,7 @@ enum UploadStatus {
 }
 
 interface UploadCompleted {
-    imageElement: Item;
+    element: Item;
     data: Record<string, string>;
 }
 
@@ -119,10 +119,10 @@ export class ClipboardImagePlugin extends Plugin {
             });
         });
 
-        this.on('uploadComplete', ((_evt: EventInfo, { imageElement, data }: UploadCompleted) => {
+        this.on('uploadComplete', ((_: EventInfo, { element, data }: UploadCompleted) => {
             editor.model.change((writer) => {
-                writer.setAttribute('src', data.default, imageElement);
-                parseAndSetSrcAttributeOnImage(data, imageElement, writer);
+                writer.setAttribute('src', data.default, element);
+                parseAndSetSrcAttributeOnImage(data, element, writer);
             });
         }) as any, { priority: 'low' });
 
@@ -151,55 +151,50 @@ export class ClipboardImagePlugin extends Plugin {
                 const loader = fileRepository.createLoader(image.promise as any);
 
                 if (loader) {
-                    const uploadId = `${loader.id}`;
                     writer.setAttribute('src', '', image.element);
-                    writer.setAttribute('uploadId', uploadId, image.element);
+                    writer.setAttribute('uploadId', `${loader.id}`, image.element);
                 }
             });
         }) as any);
     }
 
-    private readAndUpload(loader: FileLoader) {
-        const { editor } = this;
-        const { model } = editor;
-        const fileRepository = editor.plugins.get(FileRepository);
-        const imageUploadElements = this.images;
+    private async readAndUpload(loader: FileLoader) {
+        const { editor: { model, plugins }, images } = this;
+        const fileRepository = plugins.get(FileRepository);
         const uploadId: string = `${loader.id}`;
-        const imageElement = imageUploadElements.get(uploadId) as Item;
+        const element = images.get(uploadId) as Item;
 
         model.enqueueChange('transparent', (writer) => {
-            writer.setAttribute('uploadStatus', UploadStatus.Reading, imageElement);
+            writer.setAttribute('uploadStatus', UploadStatus.Reading, element);
         });
 
-        return loader.read()
-            .then(() => {
-                model.enqueueChange('transparent', (writer) => {
-                    writer.setAttribute('uploadStatus', UploadStatus.Uploading, imageElement);
-                });
+        try {
+            await loader.read();
 
-                return loader.upload();
-            })
-            .then((data) => {
-                model.enqueueChange('transparent', (writer) => {
-                    writer.setAttribute('uploadStatus', UploadStatus.Complete, imageElement);
-
-                    this.fire('uploadComplete', { data, imageElement } as UploadCompleted);
-                });
-            })
-            .catch(() => {
-                model.enqueueChange('transparent', (writer) => {
-                    writer.remove(imageElement);
-                });
-            })
-            .finally(() => {
-                model.enqueueChange('transparent', (writer) => {
-                    writer.removeAttribute('uploadId', imageElement);
-                    writer.removeAttribute('uploadStatus', imageElement);
-
-                    imageUploadElements.delete(uploadId);
-                });
-
-                fileRepository.destroyLoader(loader);
+            model.enqueueChange('transparent', (writer) => {
+                writer.setAttribute('uploadStatus', UploadStatus.Uploading, element);
             });
+
+            const data = await loader.upload();
+
+            model.enqueueChange('transparent', (writer) => {
+                writer.setAttribute('uploadStatus', UploadStatus.Complete, element);
+
+                this.fire('uploadComplete', { data, element } as UploadCompleted);
+            });
+        } catch (error) {
+            model.enqueueChange('transparent', (writer) => {
+                writer.remove(element);
+            });
+        } finally {
+            model.enqueueChange('transparent', (writer) => {
+                writer.removeAttribute('uploadId', element);
+                writer.removeAttribute('uploadStatus', element);
+
+                images.delete(uploadId);
+            });
+
+            fileRepository.destroyLoader(loader);
+        }
     }
 }
