@@ -30,7 +30,7 @@ export class AxiosUploadAdapter implements UploadAdapter {
 
         return this.loader.file
             .then((file) => httpClient.put<UploadedFile>('/file', file, config))
-            .then(({ data }) => ({ default: data?.url ?? 'https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png' }));
+            .then(({ data }) => ({ default: data.url }));
     }
 
     abort() {

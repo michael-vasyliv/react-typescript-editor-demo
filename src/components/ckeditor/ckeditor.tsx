@@ -33,7 +33,6 @@ export function CkEditor() {
             <CKEditor
                 editor={ClassicEditor}
                 config={{
-                    onerror: console.log,
                     plugins: [
                         FileRepository,
                         AxiosUploadPlugin,
