@@ -16,6 +16,11 @@ enum UploadStatus {
     Complete = 'complete'
 }
 
+interface UploadCompleted {
+    imageElement: Item;
+    data: Record<string, string>;
+}
+
 interface DataTransferData extends DomEventData {
     content: ViewElement;
 }
@@ -26,7 +31,7 @@ interface FetchableImage {
 
 const { BASE_URL = null } = process.env;
 
-function getImagesFromChangeItem(editor: Editor, item: any) {
+function getImagesFromChangeItem(editor: Editor, item: Item) {
     const imageUtils = editor.plugins.get(ImageUtils);
 
     return Array.from(editor.model.createRangeOn(item))
@@ -34,7 +39,7 @@ function getImagesFromChangeItem(editor: Editor, item: any) {
         .map((value) => value.item);
 }
 
-function parseAndSetSrcAttributeOnImage(data: any, image: Element, writer: Writer) {
+function parseAndSetSrcAttributeOnImage(data: any, image: Item, writer: Writer) {
     let maxWidth = 0;
 
     const srcAttribute = Object.keys(data)
@@ -88,7 +93,7 @@ export class ClipboardImagePlugin extends Plugin {
                 if (entry.type === 'insert' && entry.name !== '$text') {
                     const item = entry.position.nodeAfter;
 
-                    const elements = getImagesFromChangeItem(editor, item);
+                    const elements = getImagesFromChangeItem(editor, item as Item);
                     elements.forEach((element) => {
                         const uploadId = element.getAttribute('uploadId') as string;
 
@@ -114,12 +119,12 @@ export class ClipboardImagePlugin extends Plugin {
             });
         });
 
-        this.on('uploadComplete', (_evt, { imageElement, data }: any) => {
+        this.on('uploadComplete', ((_evt: EventInfo, { imageElement, data }: UploadCompleted) => {
             editor.model.change((writer) => {
                 writer.setAttribute('src', data.default, imageElement);
                 parseAndSetSrcAttributeOnImage(data, imageElement, writer);
             });
-        }, { priority: 'low' });
+        }) as any, { priority: 'low' });
 
         /**
          * @description For every image file, a new file loader is created and a placeholder image is
@@ -178,7 +183,7 @@ export class ClipboardImagePlugin extends Plugin {
                 model.enqueueChange('transparent', (writer) => {
                     writer.setAttribute('uploadStatus', UploadStatus.Complete, imageElement);
 
-                    this.fire('uploadComplete', { data, imageElement });
+                    this.fire('uploadComplete', { data, imageElement } as UploadCompleted);
                 });
             })
             .catch(() => {
