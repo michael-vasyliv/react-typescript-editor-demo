@@ -8,13 +8,11 @@ interface UploadedFile {
 }
 
 export class AxiosUploadAdapter implements UploadAdapter {
-    private loader: FileLoader;
-
     private cancelToken?: CancelTokenSource;
 
-    constructor(loader: FileLoader) {
-        this.loader = loader;
-    }
+    constructor(
+        private loader: FileLoader
+    ) { }
 
     private onUploadProgress = (data: { total: number, loaded: number }) => {
         this.loader.uploadTotal = data.total;

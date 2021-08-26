@@ -9,10 +9,14 @@ export class AxiosUploadPlugin extends Plugin {
     }
 
     static get pluginName() {
-        return 'UploadAdapterPlugin';
+        return 'AxiosUploadPlugin';
     }
 
     init() {
-        this.editor.plugins.get(FileRepository).createUploadAdapter = (loader: FileLoader) => new AxiosUploadAdapter(loader);
+        const fileRepository = this.editor.plugins.get(FileRepository);
+
+        fileRepository.createUploadAdapter = (loader: FileLoader) => new AxiosUploadAdapter(
+            loader
+        );
     }
 }

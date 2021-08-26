@@ -1,9 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-// import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
@@ -40,7 +38,6 @@ export function CkEditor() {
 
                         Image,
                         ImageInsert,
-                        // EasyImage,
                         ImageStyle,
                         ImageToolbar,
 
@@ -69,6 +66,7 @@ export function CkEditor() {
                             '|',
                             'bold',
                             'italic',
+                            'blockQuote',
                             'link',
                             'bulletedList',
                             'numberedList',
@@ -77,8 +75,8 @@ export function CkEditor() {
                             'indent',
                             '|',
                             'insertImage',
-                            'blockQuote',
                             'insertTable',
+                            '|',
                             'undo',
                             'redo'
                         ]
@@ -89,7 +87,6 @@ export function CkEditor() {
                             'imageStyle:block',
                             'imageStyle:side',
                             '|',
-                            'toggleImageCaption',
                             'imageTextAlternative'
                         ]
                     },
