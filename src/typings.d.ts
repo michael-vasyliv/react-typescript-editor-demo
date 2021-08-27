@@ -12,9 +12,22 @@ type ExtendProps<T extends (...args: any) => any> = T extends (first: infer P) =
 type Nullable<T> = T | undefined;
 
 declare module '@ckeditor/ckeditor5-react' {
-    export { CKEditor, CKEditorContext };
-}
+    import { EditorConfig } from '@ckeditor/ckeditor5-core/src/editor/editorconfig';
+    import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+    import Event from '@ckeditor/ckeditor5-utils/src/eventinfo';
+    import * as React from 'react';
 
-declare module 'quill-better-table' {
-    export default QuillBetterTable;
+    const CKEditor: React.FunctionComponent<{
+        disabled?: boolean;
+        editor: typeof ClassicEditor;
+        data?: string;
+        id?: string;
+        config?: EditorConfig;
+        onReady?: (editor: ClassicEditor) => void;
+        onChange?: (event: Event, editor: ClassicEditor) => void;
+        onBlur?: (event: Event, editor: ClassicEditor) => void;
+        onFocus?: (event: Event, editor: ClassicEditor) => void;
+        onError?: (event: Event, editor: ClassicEditor) => void;
+    }>;
+    export { CKEditor };
 }
